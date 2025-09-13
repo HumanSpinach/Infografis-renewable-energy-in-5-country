@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energi Terbarukan: 5 Negara Terdepan</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #f8f6f2, #e9f5e9);
+            color: #5a5a5a;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow-x: hidden;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);
+            color: #5a5a5a;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 1.5s ease-out;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            color: #75c9b1;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            color: #7e7e7e;
+        }
+        
+        .earth-icon {
+            font-size: 3rem;
+            color: #75c9b1;
+            animation: rotate 20s linear infinite;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        
+        .intro {
+            background-color: #ffd3b6;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            animation: slideIn 1s ease-out;
+            color: #7e7e7e;
+        }
+        
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .country-card {
+            background-color: #ffd3b6;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            animation: fadeIn 1s ease-out;
+            animation-fill-mode: backwards;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .country-card:nth-child(1) { animation-delay: 0.2s; }
+        .country-card:nth-child(2) { animation-delay: 0.4s; }
+        .country-card:nth-child(3) { animation-delay: 0.6s; }
+        .country-card:nth-child(4) { animation-delay: 0.8s; }
+        .country-card:nth-child(5) { animation-delay: 1s; }
+        
+        .country-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-image {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+        }
+        
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .country-card:hover .card-image img {
+            transform: scale(1.05);
+        }
+        
+        .card-header {
+            padding: 20px;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+        
+        .flag {
+            width: 40px;
+            height: 30px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            object-fit: cover;
+        }
+        
+        .card-body {
+            padding: 20px;
+            background-color: white;
+            overflow: hidden;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-body.collapsed {
+            max-height: 0;
+            padding: 0 20px;
+            overflow: hidden;
+        }
+        
+        .card-content {
+            overflow-y: auto;
+            max-height: 300px;
+            padding-right: 5px;
+            flex-grow: 1;
+        }
+        
+        /* Scrollbar styling */
+        .card-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .card-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .card-content::-webkit-scrollbar-thumb {
+            background: #75c9b1;
+            border-radius: 10px;
+        }
+        
+        .card-footer {
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+            position: relative;
+        }
+        
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #75c9b1;
+            margin-bottom: 5px;
+            animation: countUp 2s ease-out;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #7e7e7e;
+        }
+        
+        .video-container {
+            margin-top: 20px;
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);
+            color: #5a5a5a;
+            cursor: pointer;
+            border-radius: 10px;
+            text-align: center;
+            padding: 15px;
+        }
+        
+        .video-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: #75c9b1;
+        }
+        
+        .chart-container {
+            background-color: #a8e6cf;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            animation: slideIn 1s ease-out;
+        }
+        
+        .conclusion {
+            background-color: #dcedc1;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1.5s ease-out;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #7e7e7e;
+            font-size: 1rem;
+            animation: fadeIn 2s ease-out;
+        }
+        
+        .energy-icon {
+            font-size: 2rem;
+            color: #75c9b1;
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+        
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: #75c9b1;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .toggle-btn.rotated {
+            transform: rotate(180deg);
+        }
+        
+        .info-text {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            color: #7e7e7e;
+            line-height: 1.5;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes countUp {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+        
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .card-image {
+                height: 180px;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <i class="earth-icon fas fa-globe-americas"></i>
+        <h1>Energi Terbarukan Global</h1>
+        <p class="subtitle">5 Negara dengan Penerapan Energi Terbarukan Tertinggi</p>
+        <p>Melestarikan Bumi untuk Masa Depan yang Berkelanjutan</p>
+    </header>
+    
+    <section class="intro">
+        <i class="energy-icon fas fa-leaf"></i>
+        <h2>Mengapa Energi Terbarukan Penting untuk Bumi Kita?</h2>
+        <p>Energi terbarukan adalah kunci untuk masa depan yang berkelanjutan. Beberapa negara telah mencapai kemajuan luar biasa dalam transisi ke energi bersih, dengan sebagian besar kebutuhan energi mereka dipenuhi dari sumber terbarukan. Ini membantu mengurangi emisi karbon dan melindungi planet kita.</p>
+        <p style="margin-top: 15px;"><strong>Klik pada setiap kartu negara untuk informasi lebih detail dan tonton video tentang energi terbarukan di negara tersebut!</strong></p>
+    </section>
+    
+    <div class="grid-container">
+        <div class="country-card">
+            <div class="card-image">
+                <img src="Geotherma Swedia.png" alt="Energi Panas Bumi Islandia">
+            </div>
+            <div class="card-header" style="background: linear-gradient(to right, #75c9b1, #a8e6cf);">
+                <img src="https://flagcdn.com/w40/is.png" class="flag" alt="Bendera Islandia">
+                <h3>Islandia</h3>
+            </div>
+            <div class="card-body">
+                <div class="card-content">
+                    <p>Islandia memanfaatkan sumber energi geothermal dan hidro yang melimpah, mencapai hampir 100% energi listrik dari sumber terbarukan.</p>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value">100%</div>
+                            <div class="stat-label">Listrik</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">85%</div>
+                            <div class="stat-label">Energi Total</div>
+                        </div>
+                    </div>
+                    <div class="info-text">
+                        <p><strong>Keunikan:</strong> Islandia memiliki lebih dari 200 gunung berapi dan banyak sumber air panas, yang dimanfaatkan untuk energi geothermal. Negara ini juga memanfaatkan glasier dan sungai untuk pembangkit listrik tenaga air.</p>
+                        <p><strong>Keuntungan:</strong> Harga listrik yang sangat murah untuk penduduknya dan mengurangi ketergantungan pada impor energi. Islandia hampir sepenuhnya independen dalam hal energi.</p>
+                        <p><strong>Teknologi:</strong> Sistem pemanas distrik geothermal memanaskan 90% rumah di Islandia, mengurangi penggunaan bahan bakar fosil untuk pemanas.</p>
+                    </div>
+                    
+                    <div class="video-container">
+                        <video controls class="video-placeholder" width="320" height="240" >
+                            <source controls src="wwd.mp3juice.blog - Iceland and geothermal energy (1080p).mp4">
+                            <source controls src="wwd.mp3juice.blog - Iceland and geothermal energy (1080p).mp4">
+                            <p>Klik untuk menonton video tentang energi terbarukan di Islandia</p>
+                        </video>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <span><i class="fas fa-fire"></i> Panas Bumi & Hidro</span>
+                <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+            </div>
+        </div>
+        
+        <div class="country-card">
+            <div class="card-image">
+                <img src="pembangkit listrik tenaga air norwey.png" alt="Pembangkit Listrik Tenaga Air Norwegia">
+            </div>
+            <div class="card-header" style="background: linear-gradient(to right, #a8e6cf, #dcedc1);">
+                <img src="https://flagcdn.com/w40/no.png" class="flag" alt="Bendera Norwegia">
+                <h3>Norwegia</h3>
+            </div>
+            <div class="card-body">
+                <div class="card-content">
+                    <p>Norwegia mengandalkan tenaga air untuk hampir semua kebutuhan listriknya, dan menjadi pelopor dalam transportasi listrik.</p>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value">98%</div>
+                            <div class="stat-label">Listrik</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">70%</div>
+                            <div class="stat-label">Energi Total</div>
+                        </div>
+                    </div>
+                    <div class="info-text">
+                        <p><strong>Keunikan:</strong> Norwegia adalah produsen minyak terbesar di Eropa Barat, tetapi justru memimpin dalam kendaraan listrik. Lebih dari 80% mobil baru yang dijual adalah listrik.</p>
+                        <p><strong>Keuntungan:</strong> Memiliki cadangan energi yang stabil dan menjadi eksportir listrik terbesar di Eropa. Norwegia mengekspor listrik ke Denmark, Belanda, dan Inggris.</p>
+                        <p><strong>Investasi:</strong> Norwegia menginvestasikan pendapatan minyaknya dalam dana kekayaan nasional yang berkelanjutan, yang merupakan salah satu yang terbesar di dunia.</p>
+                    </div>
+                    
+                    <div class="video-container">
+                        <video class="video-placeholder" width="320" height="240" controls>
+                            <source src="wwd.mp3juice.blog - 99 Seconds Hydropower in Norway (1080p).mp4">
+                            <p>Klik untuk menonton video tentang energi terbarukan di Norwegia</p>
+                        </video>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <span><i class="fas fa-water"></i> Tenaga Air</span>
+                <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+            </div>
+        </div>
+        
+        <div class="country-card">
+            <div class="card-image">
+                <img src="pembangkit angin swedia.jpg" alt="Turbin Angin Swedia">
+            </div>
+            <div class="card-header" style="background: linear-gradient(to right, #dcedc1, #ffd3b6);">
+                <img src="https://flagcdn.com/w40/se.png" class="flag" alt="Bendera Swedia">
+                <h3>Swedia</h3>
+            </div>
+            <div class="card-body">
+                <div class="card-content">
+                    <p>Swedia memiliki kombinasi energi hidro, angin, dan biomassa yang seimbang, dengan target bebas bahan bakar fosil pada 2040.</p>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value">67%</div>
+                            <div class="stat-label">Energi Total</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">2040</div>
+                            <div class="stat-label">Target Bebas Fosil</div>
+                        </div>
+                    </div>
+                    <div class="info-text">
+                        <p><strong>Keunikan:</strong> Swedia menonjol karena porsi energi terbarukan yang sangat tinggi dalam bauran energinya, yaitu mencapai 67% dari konsumsi akhir energi pada 2022. Di antara sumber terbarukan tersebut, bioenergi menyumbang lebih banyak daripada seluruh bahan bakar fosil digabungkan, sementara ketergantungan impor untuk bioenergi dan limbah hanya sekitar 10%—jauh lebih rendah dibandingkan ketergantungan 100% pada batu bara.</p>
+                        <p><strong>Keuntungan:</strong> Mengurangi polusi udara dan menciptakan lapangan kerja hijau yang banyak. Swedia memiliki salah satu jejak karbon terendah per kapita di Eropa.</p>
+                        <p><strong>Inovasi:</strong> Swedia telah menerapkan berbagai inovasi bioenergi yang langsung berdampak pada kehidupan masyarakatnya, menjadikannya salah satu negara paling maju dalam transisi energi bersih. Salah satu inovasi paling menonjol adalah sistem pemanas distrik berbasis biomassa, yang digunakan secara luas di kota-kota seperti Stockholm dan Uppsala. Sistem ini memanfaatkan limbah kayu dan residu kehutanan untuk menghasilkan panas yang dialirkan ke ribuan rumah dan gedung publik, menggantikan pemanas berbahan bakar fosil dan mengurangi emisi secara signifikan.</p>
+                    </div>
+                    
+                    <div class="video-container">
+                        <video class="video-placeholder" width="320" height="240" controls>
+                            <source src="wwd.mp3juice.blog - Sweden’s energy solutions powering a low-carbon future (1080p).mp4">
+                            <p>Klik untuk menonton video tentang energi terbarukan di Swedia</p>
+                        </video>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <span><i class="fas fa-wind"></i> Anemo & Bioenergi</span>
+                <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+            </div>
+        </div>
+        
+        <div class="country-card">
+            <div class="card-image">
+                <img src="biofuel brazil.jpg" alt="Biofuel Brazil">
+            </div>
+            <div class="card-header" style="background: linear-gradient(to right, #ffd3b6, #ffaaa5);">
+                <img src="https://flagcdn.com/w40/br.png" class="flag" alt="Bendera Brasil">
+                <h3>Brasil</h3>
+            </div>
+            <div class="card-body">
+                <div class="card-content">
+                    <p>Brasil memanfaatkan tenaga air dan bioetanol secara luas, dengan lebih dari 80% listrik berasal dari sumber terbarukan.</p>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value">83%</div>
+                            <div class="stat-label">Listrik</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">45%</div>
+                            <div class="stat-label">Energi Total</div>
+                        </div>
+                    </div>
+                    <div class="info-text">
+                        <p><strong>Keunikan:</strong> Brasil adalah produsen etanol terbesar kedua di dunia, yang berasal dari tebu. Negara ini juga memiliki sistem transportasi yang hampir sepenuhnya berbasis etanol.</p>
+                        <p><strong>Keuntungan:</strong> Mengurangi ketergantungan pada impor minyak dan menciptakan industri biofuel yang kuat. Program etanol Brasil telah menghemat miliaran dolar dalam impor minyak.</p>
+                        <p><strong>Diversifikasi:</strong> Selain tenaga air dan biofuel, Brasil juga mengembangkan energi angin dan surya, terutama di wilayah timur laut yang berangin.</p>
+                    </div>
+                    
+                    <div class="video-container">
+                        <video class="video-placeholder" width="320" height="240" controls>
+                            <source src="wwd.mp3juice.blog - Brazil s biofuel industry sees record growth (1080p).mp4">
+                            <p>Klik untuk menonton video tentang energi terbarukan di Brazil</p>
+                        </video>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <span><i class="fas fa-water"></i> Hidro & Biofuel</span>
+                <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+            </div>
+        </div>
+        
+        <div class="country-card">
+            <div class="card-image">
+                <img src="pembangkit air kanada.jpg" alt="Pembangkit Listrik Tenaga Air Kanada">
+            </div>
+            <div class="card-header" style="background: linear-gradient(to right, #ffaaa5, #ff8b94);">
+                <img src="https://flagcdn.com/w40/ca.png" class="flag" alt="Bendera Kanada">
+                <h3>Kanada</h3>
+            </div>
+            <div class="card-body">
+                <div class="card-content">
+                    <p>Kanada mengandalkan tenaga air yang melimpah, dengan sumber angin dan surya yang terus berkembang pesat.</p>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value">67%</div>
+                            <div class="stat-label">Listrik</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">2050</div>
+                            <div class="stat-label">Target Net-zero</div>
+                        </div>
+                    </div>
+                    <div class="info-text">
+                        <p><strong>Keunikan:</strong> Kanada memiliki stasiun tenaga air terbesar ketiga di dunia, Bendungan Robert-Bourassa. Provinsi Quebec, British Columbia, dan Manitoba hampir sepenuhnya menggunakan tenaga air.</p>
+                        <p><strong>Keuntungan:</strong> Sumber energi yang andal dan hampir bebas emisi, dengan cadangan yang besar untuk ekspor. Kanada mengekspor listrik ke Amerika Serikat.</p>
+                        <p><strong>Potensi:</strong> Kanada memiliki potensi besar untuk energi angin, terutama di daerah pesisir, dan energi pasang surut yang belum sepenuhnya dimanfaatkan.</p>
+                    </div>
+                    
+                    <div class="video-container">
+                        <video class="video-placeholder" width="320" height="240" controls>
+                            <source src="wwd.mp3juice.blog - Hydropower 101 (1080p).mp4">
+                            <p>Klik untuk menonton video tentang energi terbarukan di Kanada</p>
+                        </video>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <span><i class="fas fa-water"></i> Tenaga Air</span>
+                <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="chart-container">
+        <h2><i class="fas fa-chart-bar"></i> Persentase Energi Terbarukan dalam Total Konsumsi Energi</h2>
+        <canvas id="energyChart"></canvas>
+    </div>
+    
+    <div class="conclusion">
+        <i class="energy-icon fas fa-seedling"></i>
+        <h2>Kesimpulan: Masa Depan Berkelanjutan untuk Bumi Kita</h2>
+        <p>Kelima negara ini menunjukkan keberhasilan dalam transisi ke energi terbarukan dengan strategi yang berbeda-beda sesuai dengan kondisi geografis dan sumber daya alam yang dimiliki. Islandia memanfaatkan geothermal, Norwegia dan Kanada mengandalkan tenaga air, Swedia mengembangkan kombinasi beberapa sumber, dan Brasil memanfaatkan hidro dan biofuel.</p>
+        <p>Keberhasilan mereka membuktikan bahwa dengan kebijakan yang tepat dan pemanfaatan sumber daya lokal, transisi energi menuju sistem yang lebih berkelanjutan sangat mungkin dilakukan. Ini adalah langkah penting untuk melindungi bumi kita dan memastikan masa depan yang lebih hijau untuk generasi mendatang.</p>
+        <p>Setiap negara memiliki pelajaran berharga: Islandia menunjukkan pemanfaatan sumber daya geothermal, Norwegia dengan kebijakan transportasi listriknya, Swedia dengan pajak karbonnya, Brasil dengan program biofuelnya, dan Kanada dengan pemanfaatan tenaga air skala besar.</p>
+    </div>
+    
+    <footer>
+        <p><i class="fas fa-globe-americas"></i> Infografis Energi Terbarukan &copy; 2023 - Data berdasarkan penelitian terbaru</p>
+        <p>Didesain dengan <i class="fas fa-heart" style="color: #ff8b94;"></i> untuk bumi yang lebih hijau</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('energyChart').getContext('2d');
+            
+            // Data untuk chart
+            const energyData = {
+                labels: ['Islandia', 'Norwegia', 'Swedia', 'Brasil', 'Kanada'],
+                datasets: [{
+                    label: 'Persentase Energi Terbarukan dalam Total Konsumsi Energi',
+                    data: [100, 98, 67, 60, 55],
+                    backgroundColor: [
+                        '#75c9b1',
+                        '#a8e6cf',
+                        '#dcedc1',
+                        '#ffd3b6',
+                        '#ffaaa5'
+                    ],
+                    borderColor: [
+                        '#5ab69a',
+                        '#8fd4b3',
+                        '#c5e0a5',
+                        '#f9be97',
+                        '#f98f89'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 5,
+                    hoverBackgroundColor: [
+                        '#64b39f',
+                        '#97d0b5',
+                        '#cde8b0',
+                        '#f9c6a6',
+                        '#f99c94'
+                    ]
+                }]
+            };
+            
+            // Konfigurasi chart
+            const energyChart = new Chart(ctx, {
+                type: 'bar',
+                data: energyData,
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Persentase (%)'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Kontribusi Energi Terbarukan terhadap Total Konsumsi Energi',
+                            font: {
+                                size: 18
+                            }
+                        },
+                        legend: {
+                            labels: {
+                                usePointStyle: true,
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.raw + '%';
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
+            
+            // Animasi untuk stat values
+            const statValues = document.querySelectorAll('.stat-value');
+            statValues.forEach(value => {
+                const finalValue = value.textContent;
+                value.textContent = '0';
+                
+                setTimeout(() => {
+                    let current = 0;
+                    const increment = Math.ceil(parseInt(finalValue) / 50);
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= parseInt(finalValue)) {
+                            current = parseInt(finalValue);
+                            clearInterval(timer);
+                        }
+                        value.textContent = current + (finalValue.includes('%') ? '%' : '');
+                    }, 50);
+                }, 1000);
+            });
+            
+            // Interaksi toggle untuk kartu negara
+            const toggleButtons = document.querySelectorAll('.toggle-btn');
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const card = this.closest('.country-card');
+                    const cardBody = card.querySelector('.card-body');
+                    const cardContent = card.querySelector('.card-content');
+                    
+                    if (cardBody.classList.contains('collapsed')) {
+                        cardBody.classList.remove('collapsed');
+                        cardContent.style.maxHeight = '300px';
+                        this.classList.remove('rotated');
+                    } else {
+                        cardBody.classList.add('collapsed');
+                        cardContent.style.maxHeight = '0';
+                        this.classList.add('rotated');
+                    }
+                });
+            });
+            
+            // Interaksi klik pada kartu
+            const countryCards = document.querySelectorAll('.country-card');
+            countryCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (!e.target.classList.contains('toggle-btn') && 
+                        !e.target.closest('.toggle-btn') &&
+                        !e.target.closest('.video-placeholder')) {
+                        const cardBody = this.querySelector('.card-body');
+                        const cardContent = this.querySelector('.card-content');
+                        const toggleBtn = this.querySelector('.toggle-btn');
+                        
+                        if (cardBody.classList.contains('collapsed')) {
+                            cardBody.classList.remove('collapsed');
+                            cardContent.style.maxHeight = '300px';
+                            toggleBtn.classList.remove('rotated');
+                        } else {
+                            cardBody.classList.add('collapsed');
+                            cardContent.style.maxHeight = '0';
+                            toggleBtn.classList.add('rotated');
+                        }
+                    }
+                });
+            });
+        });
+        
+        // Fungsi untuk memuat video YouTube
+        function loadVideo(element, videoUrl) {
+            const iframe = document.createElement('iframe');
+            iframe.src = videoUrl;
+            iframe.title = "YouTube video player";
+            iframe.frameBorder = "0";
+            iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+            iframe.allowFullscreen = true;
+            
+            element.parentNode.replaceChild(iframe, element);
+        }
+    </script>
+</body>
+</html>
